@@ -1244,15 +1244,15 @@ namespace thermal {
 	std::vector<struct target_therm_cfg> sun_specific = {
 		{
 			TemperatureType::BCL_CURRENT,
-			{ "pm8550b-ibat-lvl0" },
+			{ "pmih010x-ibat-lvl0" },
 			"ibat",
-			9000,
-			10000,
+			13500,
+			15000,
 			true,
 		},
 		{
 			TemperatureType::SKIN,
-			{ "skin-msm-therm" },
+			{ "sys-therm-2" },
 			"skin",
 			46500,
 			95000,
