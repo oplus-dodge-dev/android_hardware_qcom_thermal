@@ -31,7 +31,7 @@
 
 /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #include <android-base/file.h>
@@ -42,13 +42,14 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #include "thermalConfig.h"
 #include "thermalUtilsNetlink.h"
+#include "thermalCommon.h"
 
 namespace aidl {
 namespace android {
 namespace hardware {
 namespace thermal {
 
-ThermalUtils::ThermalUtils(const ueventCB &inp_cb):
+ThermalUtils::ThermalUtils(const ueventCB &inp_cb, const notifyCB &inp_cdev_cb):
 	cfg(),
 	cmnInst(),
 	monitor(std::bind(&ThermalUtils::eventParse, this,
@@ -59,8 +60,12 @@ ThermalUtils::ThermalUtils(const ueventCB &inp_cb):
 				std::placeholders::_2),
 		std::bind(&ThermalUtils::eventCreateParse, this,
 				std::placeholders::_1,
+				std::placeholders::_2),
+		std::bind(&ThermalUtils::cdevEventParse, this,
+				std::placeholders::_1,
 				std::placeholders::_2)),
-	cb(inp_cb)
+	cb(inp_cb),
+	notify(inp_cdev_cb)
 {
 	int ret = 0;
 	std::vector<struct therm_sensor> sensorList;
@@ -85,6 +90,11 @@ ThermalUtils::ThermalUtils(const ueventCB &inp_cb):
 	if (ret > 0) {
 		is_cdev_init = true;
 		cdevList = cmnInst.fetch_cdev_list();
+		std::lock_guard<std::mutex> _lock(cdev_cb_mutex);
+		for (struct therm_cdev cdevs: cdevList) {
+			cmnInst.read_cdev_state(cdevs);
+			cdev[cdevs.cdevn] = cdevs;
+		}
 	}
 }
 
@@ -99,6 +109,29 @@ void ThermalUtils::Notify(struct therm_sensor& sens)
 		cb(sens.t);
 		cmnInst.initThreshold(sens);
 	}
+}
+
+void ThermalUtils::cdevNotify(struct therm_cdev& cdev, int state)
+{
+
+	if (state > -1) {
+		cdev.c.value = state;
+
+		notify(cdev.c);
+	}
+
+}
+
+void ThermalUtils::cdevEventParse(int cdevn, int state)
+{
+	if (cdev.find(cdevn) == cdev.end()) {
+		LOG(DEBUG) << "cdev is not supported:" << cdevn
+			<< std::endl;
+		return;
+	}
+	std::lock_guard<std::mutex> _lock(cdev_cb_mutex);
+	struct therm_cdev& cdevs = cdev[cdevn];
+	return cdevNotify(cdevs, state);
 }
 
 void ThermalUtils::eventParse(int tzn, int trip)

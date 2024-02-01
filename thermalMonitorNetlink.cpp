@@ -31,7 +31,7 @@
 
  /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #include <unistd.h>
@@ -79,12 +79,14 @@ int thermal_family_cb(struct nl_msg *n, void *data)
 
 ThermalMonitor::ThermalMonitor(const eventMonitorCB &inp_event_cb,
 				const eventMonitorCB &inp_sample_cb,
-				const eventCreateMonitorCB &inp_event_create_cb):
+				const eventCreateMonitorCB &inp_event_create_cb,
+				const eventMonitorCB &inp_event_cdev_cb):
 	event_group(-1),
 	sample_group(-1),
 	event_cb(inp_event_cb),
 	sample_cb(inp_sample_cb),
-	event_create_cb(inp_event_create_cb)
+	event_create_cb(inp_event_create_cb),
+	cdev_cb(inp_event_cdev_cb)
 {
 	monitor_shutdown = false;
 }
@@ -105,7 +107,7 @@ int ThermalMonitor::event_parse(struct nl_msg *n, void *data)
 	struct nlmsghdr *nl_hdr = nlmsg_hdr(n);
 	struct genlmsghdr *hdr = genlmsg_hdr(nl_hdr);
 	struct nlattr *attrs[THERMAL_GENL_ATTR_MAX + 1];
-	int tzn = -1, trip = -1;
+	int tzn = -1, trip = -1, cdev_id = -1, curr_state = -1;
 	const char *tz_name = "";
 
 	genlmsg_parse(nl_hdr, 0, attrs, THERMAL_GENL_ATTR_MAX, NULL);
@@ -131,6 +133,15 @@ int ThermalMonitor::event_parse(struct nl_msg *n, void *data)
 		LOG(DEBUG) << "thermal_nl_event: TZ_CREATE: TZ:" << tzn << " TZ_NAME:"
 		       << tz_name << "event:" << (int)hdr->cmd << std::endl;
 		event_create_cb(tzn, tz_name);
+		break;
+	case THERMAL_GENL_EVENT_CDEV_STATE_UPDATE:
+		if (attrs[THERMAL_GENL_ATTR_CDEV_ID])
+			cdev_id = nla_get_u32(attrs[THERMAL_GENL_ATTR_CDEV_ID]);
+		if (attrs[THERMAL_GENL_ATTR_CDEV_CUR_STATE])
+			curr_state  = nla_get_u32(attrs[THERMAL_GENL_ATTR_CDEV_CUR_STATE]);
+		LOG(DEBUG) << "thermal_nl_event: CDEV:" << cdev_id <<
+				" curr_state :" << curr_state  << " event:" << (int)hdr->cmd<< std::endl;
+		cdev_cb(cdev_id, curr_state);
 		break;
 	}
 

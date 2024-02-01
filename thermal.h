@@ -30,7 +30,7 @@
 
 /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #ifndef ANDROID_QTI_VENDOR_THERMAL_H
@@ -42,6 +42,7 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #include <aidl/android/hardware/thermal/BnThermal.h>
 #include <aidl/android/hardware/thermal/IThermalChangedCallback.h>
+#include <aidl/android/hardware/thermal/ICoolingDeviceChangedCallback.h>
 
 #ifdef ENABLE_THERMAL_NETLINK
 #include "thermalUtilsNetlink.h"
@@ -57,12 +58,21 @@ namespace hardware {
 namespace thermal {
 
 struct CallbackSetting {
- 	std::shared_ptr<IThermalChangedCallback> callback;
- 	TemperatureType type;
+	std::shared_ptr<IThermalChangedCallback> callback;
+	TemperatureType type;
 
- 	CallbackSetting(std::shared_ptr<IThermalChangedCallback> callback,
- 			TemperatureType type)
- 			: callback(callback), type(type) {}
+	CallbackSetting(std::shared_ptr<IThermalChangedCallback> callback,
+			TemperatureType type)
+			: callback(callback), type(type) {}
+ };
+
+struct CdevCallbackSetting {
+	std::shared_ptr<ICoolingDeviceChangedCallback> callback;
+	CoolingType type;
+
+	CdevCallbackSetting(std::shared_ptr<ICoolingDeviceChangedCallback> callback,
+			CoolingType type)
+			: callback(callback), type(type) {}
  };
 
 class Thermal : public BnThermal {
@@ -92,15 +102,23 @@ class Thermal : public BnThermal {
     ndk::ScopedAStatus registerThermalChangedCallbackWithType(
             const std::shared_ptr<IThermalChangedCallback>& in_callback,
             TemperatureType in_type) override;
+    ndk::ScopedAStatus registerCoolingDeviceChangedCallbackWithType(
+		const std::shared_ptr<ICoolingDeviceChangedCallback> &in_callback,
+                CoolingType in_type) override;
 
     ndk::ScopedAStatus unregisterThermalChangedCallback(
             const std::shared_ptr<IThermalChangedCallback>& in_callback) override;
+    ndk::ScopedAStatus unregisterCoolingDeviceChangedCallback(
+		const std::shared_ptr<ICoolingDeviceChangedCallback> &in_callback) override;
 
     void sendThrottlingChangeCB(const Temperature &t);
+    void sendCoolingDeviceChangeCB(const CoolingDevice &c);
 
   private:
     std::mutex thermal_callback_mutex_;
+    std::mutex cdev_callback_mutex_;
     std::vector<CallbackSetting> cb;
+    std::vector<CdevCallbackSetting> cdev_cb;
     ThermalUtils utils;
 };
 

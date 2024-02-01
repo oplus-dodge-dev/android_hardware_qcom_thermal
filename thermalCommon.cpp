@@ -30,7 +30,7 @@
 
 /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #include <cstdio>
@@ -112,6 +112,7 @@ static std::unordered_map<std::string, cdevType> cdev_map = {
 	{"cdsp_hw", cdevType::NPU},
 	{"battery", cdevType::BATTERY},
 	{"fan-max31760", cdevType::FAN},
+	{"display-fps", cdevType::DISPLAY},
 };
 
 ThermalCommon::ThermalCommon()
