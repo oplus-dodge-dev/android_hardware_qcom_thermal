@@ -45,7 +45,7 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #define MAX_LENGTH		50
 #define MAX_PATH		(256)
-#define DEFAULT_HYSTERESIS	5000
+#define DEFAULT_HYSTERESIS	5
 #define THERMAL_SYSFS		"/sys/class/thermal/"
 #define TZ_DIR_NAME		"thermal_zone"
 #define TZ_DIR_FMT		"thermal_zone%d"
@@ -111,6 +111,7 @@ static std::unordered_map<std::string, cdevType> cdev_map = {
 	{"cdsp", cdevType::NPU},
 	{"cdsp_hw", cdevType::NPU},
 	{"battery", cdevType::BATTERY},
+	{"fan-max31760", cdevType::FAN},
 };
 
 ThermalCommon::ThermalCommon()
@@ -435,12 +436,12 @@ int ThermalCommon::estimateSeverity(struct therm_sensor& sensor)
 				!isnan(sensor.thresh.hotThrottlingThresholds[idx]) &&
 				temp >=
 				(sensor.thresh.hotThrottlingThresholds[idx] -
-				DEFAULT_HYSTERESIS / sensor.mulFactor)) ||
+				DEFAULT_HYSTERESIS)) ||
 				(!sensor.positiveThresh &&
 				!isnan(sensor.thresh.coldThrottlingThresholds[idx]) &&
 				temp <=
 				(sensor.thresh.coldThrottlingThresholds[idx] +
-				DEFAULT_HYSTERESIS / sensor.mulFactor)))
+				DEFAULT_HYSTERESIS)))
 				break;
 			continue;
 		}
@@ -558,9 +559,10 @@ void ThermalCommon::initThreshold(struct therm_sensor& sensor)
 				(int)sensor.t.throttlingStatus]
 					* sensor.mulFactor;
 		if (!isnan(next_trip))
-			hyst_temp = (next_trip - curr_trip) + DEFAULT_HYSTERESIS;
+			hyst_temp = (next_trip - curr_trip) + (DEFAULT_HYSTERESIS *
+					sensor.mulFactor);
 		else
-			hyst_temp = DEFAULT_HYSTERESIS;
+			hyst_temp = DEFAULT_HYSTERESIS * sensor.mulFactor;
 		LOG(DEBUG) << "Sensor: " << sensor.t.name << " hysteresis:"
 			<< hyst_temp << std::endl;
 		snprintf(file_name, sizeof(file_name), HYST_FILE_FORMAT,
