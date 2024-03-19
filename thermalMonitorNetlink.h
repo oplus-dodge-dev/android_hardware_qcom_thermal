@@ -31,7 +31,7 @@
 
 /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #ifndef THERMAL_THERMAL_MONITOR_NETLINK_H__
@@ -56,7 +56,8 @@ class ThermalMonitor {
 	public:
 		ThermalMonitor(const eventMonitorCB &inp_event_cb,
 			const eventMonitorCB &inp_sample_cb,
-			const eventCreateMonitorCB &inp_event_create_cb);
+			const eventCreateMonitorCB &inp_event_create_cb,
+			const eventMonitorCB &inp_event_cdev_cb);
 		~ThermalMonitor();
 
 		void parse_and_notify(char *inp_buf, ssize_t len);
@@ -75,6 +76,7 @@ class ThermalMonitor {
 		bool monitor_shutdown;
 		eventMonitorCB event_cb, sample_cb;
 		eventCreateMonitorCB event_create_cb;
+		eventMonitorCB  cdev_cb;
 
 		int fetch_group_id();
 		int send_nl_msg(struct nl_msg *msg);

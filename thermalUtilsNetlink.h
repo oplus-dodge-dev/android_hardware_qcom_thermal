@@ -31,7 +31,7 @@
 
 /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #ifndef THERMAL_THERMAL_UTILS_H__
@@ -51,10 +51,11 @@ namespace hardware {
 namespace thermal {
 
 using ueventCB = std::function<void(Temperature &t)>;
+using notifyCB = std::function<void(CoolingDevice &c)>;
 
 class ThermalUtils {
 	public:
-		ThermalUtils(const ueventCB &inp_cb);
+		ThermalUtils(const ueventCB &inp_cb, const notifyCB &inp_cdev_cb);
 		~ThermalUtils() = default;
 		bool isSensorInitialized()
 		{
@@ -81,14 +82,20 @@ class ThermalUtils {
 		ThermalMonitor monitor;
 		std::unordered_map<int, struct therm_sensor>
 			thermalConfig;
+		std::unordered_map<int, struct therm_cdev>
+			cdev;
 		std::vector<struct therm_cdev> cdevList;
 		std::mutex sens_cb_mutex;
+		std::mutex cdev_cb_mutex;
 		ueventCB cb;
+		notifyCB notify;
 
 		void eventParse(int tzn, int trip);
 		void sampleParse(int tzn, int temp);
 		void eventCreateParse(int tzn, const char *name);
 		void Notify(struct therm_sensor& sens);
+		void cdevNotify(struct therm_cdev& cdev, int state);
+		void cdevEventParse(int cdevn, int state);
 };
 
 }  // namespace thermal

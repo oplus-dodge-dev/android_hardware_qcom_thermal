@@ -30,7 +30,7 @@
 
 /* Changes from Qualcomm Innovation Center are provided under the following license:
 
-Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
 SPDX-License-Identifier: BSD-3-Clause-Clear */
 
 #include <ctype.h>
@@ -71,6 +71,8 @@ static const Temperature dummy_temp_1_0 = {
 
 Thermal::Thermal():
 	utils(std::bind(&Thermal::sendThrottlingChangeCB, this,
+				std::placeholders::_1),
+		std::bind(&Thermal::sendCoolingDeviceChangeCB, this,
 				std::placeholders::_1))
 { }
 
@@ -263,6 +265,72 @@ ScopedAStatus Thermal::unregisterThermalChangedCallback(
 	LOG(DEBUG) << "A callback has been registered to ThermalHAL" ;
 
 	return ScopedAStatus::ok();
+}
+
+ScopedAStatus Thermal::registerCoolingDeviceChangedCallbackWithType(
+			const std::shared_ptr<ICoolingDeviceChangedCallback> &in_callback, CoolingType in_type)
+{
+	if (in_callback == nullptr)
+		return ndk::ScopedAStatus::fromExceptionCodeWithMessage(EX_ILLEGAL_ARGUMENT,
+						"Invalid nullptr callback");
+
+	std::lock_guard<std::mutex> _lock(cdev_callback_mutex_);
+	for (CdevCallbackSetting _cb: cdev_cb) {
+		if (interfacesEqual(_cb.callback, in_callback))
+			return ndk::ScopedAStatus::fromExceptionCodeWithMessage(EX_ILLEGAL_ARGUMENT,
+					"Callback already registered");
+	}
+	cdev_cb.emplace_back(CdevCallbackSetting(in_callback, in_type));
+	LOG(DEBUG) << "CoolingDevice changed callback has been registered. Type: "<< android::hardware::thermal::toString(in_type);
+
+	return ScopedAStatus::ok();
+}
+
+ScopedAStatus Thermal::unregisterCoolingDeviceChangedCallback(
+		const std::shared_ptr<ICoolingDeviceChangedCallback> &in_callback) {
+	if (in_callback == nullptr)
+		return ndk::ScopedAStatus::fromExceptionCodeWithMessage(EX_ILLEGAL_ARGUMENT,
+						"Invalid nullptr callback");
+
+	std::lock_guard<std::mutex> _lock(cdev_callback_mutex_);
+	std::vector<CdevCallbackSetting>::iterator it;
+	bool removed = false;
+	for (auto it = cdev_cb.begin(); it != cdev_cb.end(); it++) {
+		if (interfacesEqual(it->callback, in_callback)) {
+			cdev_cb.erase(it);
+			removed = true;
+			break;
+		}
+	}
+	if (!removed) {
+		return ndk::ScopedAStatus::fromExceptionCodeWithMessage(EX_ILLEGAL_ARGUMENT,
+					"CoolingDevice changed callback wasn't registered");
+	}
+	LOG(DEBUG) << "A CoolingDevice changed callback has been unregistered to CDEV" ;
+
+	return ScopedAStatus::ok();
+}
+
+void Thermal::sendCoolingDeviceChangeCB(const CoolingDevice &c)
+{
+	std::lock_guard<std::mutex> _lock(cdev_callback_mutex_);
+	std::vector<CdevCallbackSetting>::iterator it;
+
+	LOG(DEBUG) << "Cooling device Name: " << c.name <<
+	" type: " << (int)c.type << " cur_level: " << c.value;
+	it = cdev_cb.begin();
+	while (it != cdev_cb.end()) {
+		if (it->type == c.type) {
+			::ndk::ScopedAStatus ret = it->callback->notifyCoolingDeviceChanged(c);
+				if (!ret.isOk()) {
+					LOG(ERROR) << "Notify CoolingDevice changed callback execution error. Removing"
+								<<ret.getMessage();
+					it = cdev_cb.erase(it);
+					continue;
+				}
+		}
+		it++;
+	}
 }
 
 void Thermal::sendThrottlingChangeCB(const Temperature &t)
