@@ -82,7 +82,8 @@ ThermalUtils::ThermalUtils(const ueventCB &inp_cb, const notifyCB &inp_cdev_cb):
 			thermalConfig[sens.tzn] = sens;
 			cmnInst.read_temperature(sens);
 			cmnInst.estimateSeverity(sens);
-			cmnInst.initThreshold(sens);
+			if (!sens.no_trip_set)
+				cmnInst.initThreshold(sens);
 		}
 	}
 	monitor.start();
@@ -107,7 +108,8 @@ void ThermalUtils::Notify(struct therm_sensor& sens)
 			(int)sens.lastThrottleStatus << " new: " <<
 			(int)sens.t.throttlingStatus << std::endl;
 		cb(sens.t);
-		cmnInst.initThreshold(sens);
+		if (!sens.no_trip_set)
+			cmnInst.initThreshold(sens);
 	}
 }
 
@@ -195,7 +197,8 @@ void ThermalUtils::eventCreateParse(int tzn, const char *name)
 			thermalConfig[sens.tzn] = sens;
 			cmnInst.read_temperature(sens);
 			cmnInst.estimateSeverity(sens);
-			cmnInst.initThreshold(sens);
+			if (!sens.no_trip_set)
+				cmnInst.initThreshold(sens);
 		}
 	}
 }

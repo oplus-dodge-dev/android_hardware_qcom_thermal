@@ -68,6 +68,7 @@ using ::aidl::android::hardware::thermal::ThrottlingSeverity;
 		int throt_thresh;
 		int shutdwn_thresh;
 		bool positive_thresh_ramp;
+		bool no_trip_set = false;
 	};
 
 	struct therm_sensor {
@@ -78,6 +79,7 @@ using ::aidl::android::hardware::thermal::ThrottlingSeverity;
 		ThrottlingSeverity lastThrottleStatus;
 		Temperature t;
 		TemperatureThreshold thresh;
+		bool no_trip_set;
 	};
 
 	struct therm_cdev {
