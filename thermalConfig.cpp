@@ -933,6 +933,7 @@ namespace thermal {
 		80000,
 		90000,
 		true,
+		true,
 	};
 
 	std::vector<struct target_therm_cfg> bcl_conf = {
@@ -943,6 +944,7 @@ namespace thermal {
 			3200,
 			3000,
 			false,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -1256,6 +1258,7 @@ namespace thermal {
 			"ibat",
 			13500,
 			15000,
+			true,
 			true,
 		},
 		{

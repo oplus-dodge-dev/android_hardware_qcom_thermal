@@ -264,6 +264,7 @@ int ThermalCommon::initialize_sensor(struct target_therm_cfg& cfg, int sens_idx)
 
 	sensor.sensor_name = cfg.sensor_list[sens_idx];
 	sensor.positiveThresh = cfg.positive_thresh_ramp;
+	sensor.no_trip_set = cfg.no_trip_set;
 	sensor.lastThrottleStatus = sensor.t.throttlingStatus =
 		ThrottlingSeverity::NONE;
 	sensor.thresh.type = sensor.t.type = cfg.type;
