@@ -33,3 +33,45 @@ cc_binary {
 		"-fexceptions",
 	],
 }
+
+cc_fuzz {
+    name: "aidl_fuzzer_thermal",
+    vendor: true,
+
+    shared_libs: [
+        "liblog",
+        "libbase",
+        "libutils",
+        "libcutils",
+        "libbinder",
+        "libbinder_ndk",
+        "android.hardware.thermal-V1-ndk",
+        "libnl",
+    ],
+
+    srcs: [
+        "fuzzer.cpp",
+        "thermal.cpp",
+        "thermalConfig.cpp",
+        "thermalCommon.cpp",
+        "thermalUtilsNetlink.cpp",
+        "thermalMonitorNetlink.cpp",
+    ],
+    header_libs: [
+        "liblog_headers",
+        "libcutils_headers",
+        "qti_kernel_headers"
+    ],
+
+    cflags: [
+        "-Wno-unused-parameter",
+        "-Wno-unused-variable",
+        "-DENABLE_THERMAL_NETLINK",
+        "-fexceptions",
+    ],
+
+    static_libs: [
+        "libbinder_random_parcel",
+    ],
+
+}
