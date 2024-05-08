@@ -1916,6 +1916,64 @@ namespace thermal {
 		},
 	};
 
+	std::vector<std::string> cpu_sensors_monaco = {
+		"cpuss-0",
+		"cpuss-1",
+		"cpuss-0",
+		"cpuss-1",
+		"cpuss-0",
+		"cpuss-1",
+		"cpuss-0",
+		"cpuss-1",
+	};
+
+	std::vector<struct target_therm_cfg> sensor_cfg_monaco = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_monaco,
+			"",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpu" },
+			"gpu",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::SKIN,
+			{ "pa-therm0" },
+			"skin",
+			{
+			[LIGHT] = 40000,
+			[MODERATE] = 42000,
+			[SEVERE] = 45000,
+			[CRITICAL] = 50000,
+			[EMERGENCY] = 55000,
+			[SHUTDOWN] = 95000,
+			},
+			true,
+		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm5100-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 1100,
+			[SHUTDOWN] = 1500,
+			},
+			true,
+		},
+	};
+
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
 		msm_soc_map = {
 		{417, sensor_cfg_bengal}, // bengal
@@ -1974,6 +2032,8 @@ namespace thermal {
 		{634, parrot_common}, //Netrani Gaming SKU without modem
 		{638, parrot_common}, //SM7435P
 		{663, parrot_common}, //SM7435
+		{486, sensor_cfg_monaco}, // monaco
+		{517, sensor_cfg_monaco}, // monaco
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
