@@ -46,6 +46,7 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 #define MAX_LENGTH		50
 #define MAX_PATH		(256)
 #define DEFAULT_HYSTERESIS	5
+#define DEFAULT_SKIN_HYSTERESIS	2
 #define THERMAL_SYSFS		"/sys/class/thermal/"
 #define TZ_DIR_NAME		"thermal_zone"
 #define TZ_DIR_FMT		"thermal_zone%d"
@@ -278,20 +279,14 @@ int ThermalCommon::initialize_sensor(struct target_therm_cfg& cfg, int sens_idx)
 		sensor.thresh.coldThrottlingThresholds.push_back(UNKNOWN_TEMPERATURE);
 	}
 
-	if (cfg.throt_thresh != 0 && cfg.positive_thresh_ramp)
-		sensor.thresh.hotThrottlingThresholds[(size_t)ThrottlingSeverity::SEVERE] =
-			cfg.throt_thresh / (float)sensor.mulFactor;
-	else if (cfg.throt_thresh != 0 && !cfg.positive_thresh_ramp)
-		sensor.thresh.coldThrottlingThresholds[(size_t)ThrottlingSeverity::SEVERE] =
-			cfg.throt_thresh / (float)sensor.mulFactor;
-
-	if (cfg.shutdwn_thresh != 0 && cfg.positive_thresh_ramp)
-		sensor.thresh.hotThrottlingThresholds[(size_t)ThrottlingSeverity::SHUTDOWN] =
-			cfg.shutdwn_thresh / (float)sensor.mulFactor;
-	else if (cfg.shutdwn_thresh != 0 && !cfg.positive_thresh_ramp)
-		sensor.thresh.coldThrottlingThresholds[(size_t)ThrottlingSeverity::SHUTDOWN] =
-			cfg.shutdwn_thresh / (float)sensor.mulFactor;
-
+	for (idx = 0; idx <= (size_t)ThrottlingSeverity::SHUTDOWN; idx++) {
+		if (cfg.thresh[idx] != 0 && cfg.positive_thresh_ramp)
+			sensor.thresh.hotThrottlingThresholds[idx] =
+				cfg.thresh[idx] / (float)sensor.mulFactor;
+		else if (cfg.thresh[idx] != 0 && !cfg.positive_thresh_ramp)
+			sensor.thresh.coldThrottlingThresholds[idx] =
+				cfg.thresh[idx] / (float)sensor.mulFactor;
+	}
 	sens.push_back(sensor);
 
 	return 0;
@@ -434,21 +429,21 @@ int ThermalCommon::estimateSeverity(struct therm_sensor& sensor)
 	int idx = 0;
 	ThrottlingSeverity severity = ThrottlingSeverity::NONE;
 	float temp = sensor.t.value;
+	int hysteresis = (sensor.thresh.type == TemperatureType::SKIN) ?
+				DEFAULT_SKIN_HYSTERESIS : DEFAULT_HYSTERESIS;
 
 	for (idx = (int)ThrottlingSeverity::SHUTDOWN; idx >= 0; idx--) {
 		/* If a particular threshold is hit already, check if the
 		 * hysteresis is cleared before changing the severity */
-		if (idx == (int)sensor.t.throttlingStatus) {
+		if (idx <= (int)sensor.t.throttlingStatus) {
 			if ((sensor.positiveThresh &&
 				!isnan(sensor.thresh.hotThrottlingThresholds[idx]) &&
 				temp >=
-				(sensor.thresh.hotThrottlingThresholds[idx] -
-				DEFAULT_HYSTERESIS)) ||
+				(sensor.thresh.hotThrottlingThresholds[idx] - hysteresis)) ||
 				(!sensor.positiveThresh &&
 				!isnan(sensor.thresh.coldThrottlingThresholds[idx]) &&
 				temp <=
-				(sensor.thresh.coldThrottlingThresholds[idx] +
-				DEFAULT_HYSTERESIS)))
+				(sensor.thresh.coldThrottlingThresholds[idx] + hysteresis)))
 				break;
 			continue;
 		}
@@ -521,6 +516,8 @@ void ThermalCommon::initThreshold(struct therm_sensor& sensor)
 	int ret = 0, idx;
 	ThrottlingSeverity severity = ThrottlingSeverity::NONE;
 	int next_trip, curr_trip, hyst_temp = 0;
+	int hysteresis = (sensor.thresh.type == TemperatureType::SKIN) ?
+				DEFAULT_SKIN_HYSTERESIS : DEFAULT_HYSTERESIS;
 
 	LOG(DEBUG) << "Entering " <<__func__;
 	if (!sensor.positiveThresh) {
@@ -566,10 +563,10 @@ void ThermalCommon::initThreshold(struct therm_sensor& sensor)
 				(int)sensor.t.throttlingStatus]
 					* sensor.mulFactor;
 		if (!isnan(next_trip))
-			hyst_temp = (next_trip - curr_trip) + (DEFAULT_HYSTERESIS *
+			hyst_temp = (next_trip - curr_trip) + (hysteresis *
 					sensor.mulFactor);
 		else
-			hyst_temp = DEFAULT_HYSTERESIS * sensor.mulFactor;
+			hyst_temp = hysteresis * sensor.mulFactor;
 		LOG(DEBUG) << "Sensor: " << sensor.t.name << " hysteresis:"
 			<< hyst_temp << std::endl;
 		snprintf(file_name, sizeof(file_name), HYST_FILE_FORMAT,

@@ -61,12 +61,21 @@ using TemperatureThreshold =
 	::aidl::android::hardware::thermal::TemperatureThreshold;
 using ::aidl::android::hardware::thermal::ThrottlingSeverity;
 
+	enum QthrottlingSeverity {
+		NONE = (size_t)ThrottlingSeverity::NONE,
+		LIGHT = (size_t)ThrottlingSeverity::LIGHT,
+		MODERATE = (size_t)ThrottlingSeverity::MODERATE,
+		SEVERE = (size_t)ThrottlingSeverity::SEVERE,
+		CRITICAL = (size_t)ThrottlingSeverity::CRITICAL,
+		EMERGENCY = (size_t)ThrottlingSeverity::EMERGENCY,
+		SHUTDOWN = (size_t)ThrottlingSeverity::SHUTDOWN,
+	};
+
 	struct target_therm_cfg {
 		TemperatureType type;
 		std::vector<std::string> sensor_list;
 		std::string label;
-		int throt_thresh;
-		int shutdwn_thresh;
+		int thresh[SHUTDOWN + 1];
 		bool positive_thresh_ramp;
 		bool no_trip_set = false;
 	};
