@@ -1120,7 +1120,7 @@ namespace thermal {
 		"cpu-1-1-0",
 	};
 
-	std::vector<struct target_therm_cfg> sun_profile0 = {
+	std::vector<struct target_therm_cfg> sun_common = {
 		{
 			TemperatureType::CPU,
 			cpu_sensors_sun,
@@ -1247,137 +1247,6 @@ namespace thermal {
 			"nsp6",
 			95000,
 			115000,
-			true,
-		},
-	};
-
-	std::vector<struct target_therm_cfg> sun_profile1 = {
-		{
-			TemperatureType::CPU,
-			cpu_sensors_sun,
-			"",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-0" },
-			"GPU0",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-1" },
-			"GPU1",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-2" },
-			"GPU2",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-3" },
-			"GPU3",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-4" },
-			"GPU4",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-5" },
-			"GPU5",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-6" },
-			"GPU6",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::GPU,
-			{ "gpuss-7" },
-			"GPU7",
-			105000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphvx-0" },
-			"nsp0",
-			95000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphvx-1" },
-			"nsp1",
-			95000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphvx-2" },
-			"nsp2",
-			95000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphmx-0" },
-			"nsp3",
-			95000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphmx-1" },
-			"nsp4",
-			95000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphmx-2" },
-			"nsp5",
-			95000,
-			125000,
-			true,
-		},
-		{
-			TemperatureType::NPU,
-			{ "nsphmx-3" },
-			"nsp6",
-			95000,
-			125000,
 			true,
 		},
 	};
@@ -1450,8 +1319,8 @@ namespace thermal {
 		{601, kalama_common}, //Kalamap_sg
 		{557, pineapple_common}, //Pineapple
 		{577, pineapple_common}, //Pineapplep
-		{618, sun_specific}, //Sun
-		{639, sun_specific}, //Sunp
+		{618, sun_common}, //Sun
+		{639, sun_common}, //Sunp
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -1476,39 +1345,22 @@ namespace thermal {
 		{601, kalama_specific}, //Kalamap_sg
 		{557, pineapple_specific}, //Pineapple
 		{577, pineapple_specific}, //Pineapplep
-	};
-
-	const std::unordered_multimap<int, std::pair<int, std::vector<struct target_therm_cfg>>>
-	msm_limit_profile_specific = {
-		{618, std::make_pair(0, sun_profile0)},
-		{618, std::make_pair(1, sun_profile1)},
-		{639, std::make_pair(0, sun_profile0)},
-		{639, std::make_pair(1, sun_profile1)},
+		{618, sun_specific}, //Sun
+		{639, sun_specific}, //Sunp
 	};
 
 	std::vector<struct target_therm_cfg> add_target_config(
-			int socID, int lp,
+			int socID,
 			std::vector<struct target_therm_cfg> conf)
 	{
 		std::vector<struct target_therm_cfg> targetConf;
 
-		if (msm_soc_specific.find(socID) != msm_soc_specific.end()) {
-			targetConf = (msm_soc_specific.find(socID))->second;
+		if (msm_soc_specific.find(socID) == msm_soc_specific.end())
+			return conf;
+		targetConf = (msm_soc_specific.find(socID))->second;
 
-			conf.insert(conf.end(), targetConf.begin(),
-						targetConf.end());
-		}
-
-		auto range = msm_limit_profile_specific.equal_range(socID);
-		auto it = range.first;
-		for (; it != range.second; ++it) {
-			if (it->second.first != lp)
-				continue;
-			targetConf = it->second.second;
-			conf.insert(conf.end(), targetConf.begin(),targetConf.end());
-			break;
-		}
-
+		conf.insert(conf.end(), targetConf.begin(),
+					targetConf.end());
 		return conf;
 	}
 
@@ -1540,19 +1392,12 @@ namespace thermal {
 			LOG(ERROR) << "Invalid soc ID: " << soc_id;
 			return;
 		}
-
-		limitp = cmnInst.findLimitProfile();
-		if (limitp < 0) {
-			LOG(DEBUG) << "Invalid limit profile, defaulting to 0.";
-			limitp = 0;
-		}
-
 		it = msm_soc_map.find(soc_id);
 		if (it == msm_soc_map.end()) {
 			LOG(ERROR) << "No config for soc ID: " << soc_id;
 			return;
 		}
-		thermalConfig = add_target_config(soc_id, limitp, it->second);
+		thermalConfig = add_target_config(soc_id, it->second);
 		for (it_vec = thermalConfig.begin();
 				it_vec != thermalConfig.end(); it_vec++) {
 			if (it_vec->type == TemperatureType::BCL_PERCENTAGE)
