@@ -53,6 +53,8 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 #define POLICY_FILE_FORMAT	"/sys/class/thermal/thermal_zone%d/policy"
 #define TRIP_FILE_FORMAT	"/sys/class/thermal/thermal_zone%d/trip_point_1_temp"
 #define HYST_FILE_FORMAT	"/sys/class/thermal/thermal_zone%d/trip_point_1_hyst"
+#define TRIP_TYPE_FILE_FORMAT	"/sys/class/thermal/thermal_zone%d/trip_point_%d_type"
+#define TRIP_N_FILE_FORMAT	"/sys/class/thermal/thermal_zone%d/trip_point_%d_temp"
 #define USER_SPACE_POLICY	"user_space"
 #define TZ_TYPE			"type"
 #define CDEV_DIR_NAME		"cooling_device"
@@ -60,6 +62,9 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 #define CDEV_CUR_STATE_PATH	"/sys/class/thermal/cooling_device%d/cur_state"
 #define CPU_USAGE_FILE		"/proc/stat"
 #define CPU_ONLINE_FILE_FORMAT	"/sys/devices/system/cpu/cpu%d/online"
+#define LIMIT_PROFILE_1_SD_TEMP	125000
+#define LIMIT_PROFILE_TRIP_TYPE	"hot"
+#define LIMIT_PROFILE_SD_TZ	"aoss-0"
 
 namespace aidl {
 namespace android {
@@ -575,6 +580,62 @@ void ThermalCommon::initThreshold(struct therm_sensor& sensor)
 	return;
 }
 
+int ThermalCommon::findLimitProfile(void)
+{
+	char file_name[MAX_PATH];
+	std::string buf;
+	int trip = 1, lp = -1;
+	int ct = 0, ret = 0;
+	bool read_ok = false;
+	int tzn = get_tzn(LIMIT_PROFILE_SD_TZ);
+	if (tzn < 0) {
+		LOG(ERROR) <<" Not able to get tz id for "
+		         << LIMIT_PROFILE_SD_TZ << std::endl;
+		return -1;
+	}
+
+	do {
+		snprintf(file_name, sizeof(file_name), TRIP_TYPE_FILE_FORMAT,
+			tzn, trip);
+		ret = readFromFile(std::string_view(file_name), buf);
+		if (ret <= 0) {
+			LOG(ERROR) <<" Not able to read trip type trip: "
+					<< trip << std::endl;
+			return -1;
+		}
+		if (strncmp(buf.c_str(), LIMIT_PROFILE_TRIP_TYPE,
+					strlen(LIMIT_PROFILE_TRIP_TYPE))) {
+			trip++;
+			continue;
+		}
+
+		snprintf(file_name, sizeof(file_name), TRIP_N_FILE_FORMAT,
+				tzn, trip);
+		do {
+			ret = readFromFile(std::string_view(file_name), buf);
+			if (ret <= 0) {
+				LOG(ERROR) <<" Not able to read trip temp, id: "
+					<< trip << std::endl;
+				return -1;
+			}
+			try {
+				lp = std::stoi(buf, nullptr, 0);
+				read_ok = true;
+			}
+			catch (std::exception &err) {
+				LOG(ERROR) <<"limits profile stoi err:"
+					<< err.what() << " buf:" << buf;
+			}
+			ct++;
+		} while (!read_ok && ct < RETRY_CT);
+
+		lp = lp == LIMIT_PROFILE_1_SD_TEMP ? 1 : 0;
+
+		break;
+	} while (1);
+
+	return lp;
+}
 }// namespace thermal
 }// namespace hardware
 }// namespace android

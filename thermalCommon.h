@@ -53,7 +53,7 @@ class ThermalCommon {
 		int read_cdev_state(struct therm_cdev& cdev);
 		int read_temperature(struct therm_sensor& sensor);
 		int estimateSeverity(struct therm_sensor& sensor);
-
+		int findLimitProfile(void);
 		std::vector<struct therm_sensor> fetch_sensor_list()
 		{
 			return sens;
