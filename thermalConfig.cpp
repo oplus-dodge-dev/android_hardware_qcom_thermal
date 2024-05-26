@@ -28,7 +28,7 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -1754,6 +1754,168 @@ namespace thermal {
 		},
 	};
 
+	std::vector<std::string> cpu_sensors_parrot =
+	{
+		"cpu-0-0",
+		"cpu-0-1",
+		"cpu-0-2",
+		"cpu-0-3",
+		"cpu-1-0",
+		"cpu-1-2",
+		"cpu-1-4",
+		"cpu-1-6",
+	};
+
+	std::vector<struct target_therm_cfg>  parrot_common = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_parrot,
+			"",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-0" },
+			"GPU0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-1" },
+			"GPU1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nspss-0" },
+			"nsp0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nspss-1" },
+			"nsp1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-0" },
+			"GPU0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-1" },
+			"GPU1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-2" },
+			"GPU2",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-3" },
+			"GPU3",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-4" },
+			"GPU4",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-5" },
+			"GPU5",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-6" },
+			"GPU6",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+	};
+
+	std::vector<struct target_therm_cfg>  parrot_specific = {
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm7250b-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 6000,
+			[SHUTDOWN] = 7500,
+			},
+			true,
+		},
+		{
+			TemperatureType::SKIN,
+			{ "xo-therm" },
+			"skin",
+			{
+			[LIGHT] = 50000,
+			[MODERATE] = 52000,
+			[SEVERE] = 55000,
+			[CRITICAL] = 60000,
+			[EMERGENCY] = 65000,
+			[SHUTDOWN] = 95000,
+			},
+			true,
+		},
+	};
+
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
 		msm_soc_map = {
 		{417, sensor_cfg_bengal}, // bengal
@@ -1804,6 +1966,14 @@ namespace thermal {
 		{577, pineapple_common}, //Pineapplep
 		{618, sun_specific}, //Sun
 		{639, sun_specific}, //Sunp
+		{537, parrot_common}, //Netrani mobile
+		{583, parrot_common}, //Netrani mobile without modem
+		{613, parrot_common}, //Netrani APQ
+		{631, parrot_common},
+		{633, parrot_common}, //Netrani Gaming SKU with modem
+		{634, parrot_common}, //Netrani Gaming SKU without modem
+		{638, parrot_common}, //SM7435P
+		{663, parrot_common}, //SM7435
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -1828,6 +1998,11 @@ namespace thermal {
 		{601, kalama_specific}, //Kalamap_sg
 		{557, pineapple_specific}, //Pineapple
 		{577, pineapple_specific}, //Pineapplep
+		{537, parrot_specific}, //Netrani mobile
+		{583, parrot_specific}, //Netrani mobile without modem
+		{613, parrot_specific}, //Netrani APQ
+		{631, parrot_specific},
+		{663, parrot_specific}, //Netrani pro
 	};
 
 	const std::unordered_multimap<int, std::pair<int, std::vector<struct target_therm_cfg>>>
