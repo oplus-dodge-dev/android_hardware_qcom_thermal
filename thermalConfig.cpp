@@ -2088,12 +2088,14 @@ namespace thermal {
 
 		auto range = msm_limit_profile_specific.equal_range(socID);
 		auto it = range.first;
-		for (; it != range.second; ++it) {
-			if (it->second.first != lp)
-				continue;
-			targetConf = it->second.second;
-			conf.insert(conf.end(), targetConf.begin(),targetConf.end());
-			break;
+		if (range.first != msm_limit_profile_specific.end()) {
+			for (; it != range.second; ++it) {
+				if (it->second.first != lp)
+					continue;
+				targetConf = it->second.second;
+				conf.insert(conf.end(), targetConf.begin(),targetConf.end());
+				break;
+			}
 		}
 
 		return conf;
@@ -2128,10 +2130,13 @@ namespace thermal {
 			return;
 		}
 
-		limitp = cmnInst.findLimitProfile();
-		if (limitp < 0) {
-			LOG(DEBUG) << "Invalid limit profile, defaulting to 0.";
-			limitp = 0;
+		auto range = msm_limit_profile_specific.equal_range(soc_id);
+		if (range.first != msm_limit_profile_specific.end()) {
+			limitp = cmnInst.findLimitProfile();
+			if (limitp < 0) {
+				LOG(DEBUG) << "Invalid limit profile, defaulting to 0.";
+				limitp = 0;
+			}
 		}
 
 		it = msm_soc_map.find(soc_id);
