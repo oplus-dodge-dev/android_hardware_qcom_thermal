@@ -1410,6 +1410,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1419,6 +1420,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1430,6 +1432,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1439,6 +1442,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1450,6 +1454,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1459,6 +1464,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1470,6 +1476,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1479,6 +1486,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1490,6 +1498,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1499,6 +1508,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1510,6 +1520,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1519,6 +1530,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1530,6 +1542,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1539,6 +1552,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1550,6 +1564,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1559,6 +1574,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 	};
@@ -1573,6 +1589,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1582,6 +1599,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1593,6 +1611,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1602,6 +1621,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1613,6 +1633,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1622,6 +1643,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1633,6 +1655,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1642,6 +1665,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1653,15 +1677,17 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
 			{ "nsphvx-0" },
 			"nsp0",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1669,9 +1695,10 @@ namespace thermal {
 			{ "nsphvx-1" },
 			"nsp1",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1679,9 +1706,10 @@ namespace thermal {
 			{ "nsphvx-2" },
 			"nsp2",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1689,9 +1717,10 @@ namespace thermal {
 			{ "nsphmx-0" },
 			"nsp3",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1699,9 +1728,10 @@ namespace thermal {
 			{ "nsphmx-1" },
 			"nsp4",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1709,9 +1739,10 @@ namespace thermal {
 			{ "nsphmx-2" },
 			"nsp5",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1719,9 +1750,10 @@ namespace thermal {
 			{ "nsphmx-3" },
 			"nsp6",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 	};
