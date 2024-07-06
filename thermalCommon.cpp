@@ -66,6 +66,7 @@ SPDX-License-Identifier: BSD-3-Clause-Clear */
 #define LIMIT_PROFILE_1_SD_TEMP	125000
 #define LIMIT_PROFILE_TRIP_TYPE	"hot"
 #define LIMIT_PROFILE_SD_TZ	"aoss-0"
+#define LIMIT_PROFILE_TRIP_MAX	11
 
 namespace aidl {
 namespace android {
@@ -160,7 +161,7 @@ static int readLineFromFile(std::string_view path, std::string& out)
 	if (fd == NULL) {
 		LOG(ERROR) << "Path:" << std::string(path) << " file open error.err:"
 			<< strerror(errno) << std::endl;
-		return errno;
+		return -errno;
 	}
 
 	fgets_ret = fgets(buf, MAX_LENGTH, fd);
@@ -603,6 +604,8 @@ int ThermalCommon::findLimitProfile(void)
 		if (strncmp(buf.c_str(), LIMIT_PROFILE_TRIP_TYPE,
 					strlen(LIMIT_PROFILE_TRIP_TYPE))) {
 			trip++;
+			if (trip > LIMIT_PROFILE_TRIP_MAX)
+				return -1;
 			continue;
 		}
 

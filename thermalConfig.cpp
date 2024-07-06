@@ -28,7 +28,7 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -1410,6 +1410,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1419,6 +1420,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1430,6 +1432,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1439,6 +1442,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1450,6 +1454,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1459,6 +1464,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1470,6 +1476,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1479,6 +1486,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1490,6 +1498,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1499,6 +1508,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1510,6 +1520,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1519,6 +1530,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1530,6 +1542,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1539,6 +1552,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1550,6 +1564,7 @@ namespace thermal {
 			[SHUTDOWN] = 115000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
@@ -1559,6 +1574,7 @@ namespace thermal {
 			[SEVERE] = 95000,
 			[SHUTDOWN] = 115000,
 			},
+			true,
 			true,
 		},
 	};
@@ -1573,6 +1589,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1582,6 +1599,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1593,6 +1611,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1602,6 +1621,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1613,6 +1633,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1622,6 +1643,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1633,6 +1655,7 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::GPU,
@@ -1642,6 +1665,7 @@ namespace thermal {
 			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1653,15 +1677,17 @@ namespace thermal {
 			[SHUTDOWN] = 125000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::NPU,
 			{ "nsphvx-0" },
 			"nsp0",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1669,9 +1695,10 @@ namespace thermal {
 			{ "nsphvx-1" },
 			"nsp1",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1679,9 +1706,10 @@ namespace thermal {
 			{ "nsphvx-2" },
 			"nsp2",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1689,9 +1717,10 @@ namespace thermal {
 			{ "nsphmx-0" },
 			"nsp3",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1699,9 +1728,10 @@ namespace thermal {
 			{ "nsphmx-1" },
 			"nsp4",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1709,9 +1739,10 @@ namespace thermal {
 			{ "nsphmx-2" },
 			"nsp5",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1719,9 +1750,10 @@ namespace thermal {
 			{ "nsphmx-3" },
 			"nsp6",
 			{
-			[SEVERE] = 95000,
+			[SEVERE] = 105000,
 			[SHUTDOWN] = 125000,
 			},
+			true,
 			true,
 		},
 	};
@@ -1749,6 +1781,226 @@ namespace thermal {
 			[CRITICAL] = 50000,
 			[EMERGENCY] = 55000,
 			[SHUTDOWN] = 95000,
+			},
+			true,
+		},
+	};
+
+	std::vector<std::string> cpu_sensors_parrot =
+	{
+		"cpu-0-0",
+		"cpu-0-1",
+		"cpu-0-2",
+		"cpu-0-3",
+		"cpu-1-0",
+		"cpu-1-2",
+		"cpu-1-4",
+		"cpu-1-6",
+	};
+
+	std::vector<struct target_therm_cfg>  parrot_common = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_parrot,
+			"",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-0" },
+			"GPU0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-1" },
+			"GPU1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nspss-0" },
+			"nsp0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nspss-1" },
+			"nsp1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-0" },
+			"GPU0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-1" },
+			"GPU1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-2" },
+			"GPU2",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-3" },
+			"GPU3",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-4" },
+			"GPU4",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-5" },
+			"GPU5",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-6" },
+			"GPU6",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+	};
+
+	std::vector<struct target_therm_cfg>  parrot_specific = {
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm7250b-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 6000,
+			[SHUTDOWN] = 7500,
+			},
+			true,
+		},
+		{
+			TemperatureType::SKIN,
+			{ "xo-therm" },
+			"skin",
+			{
+			[LIGHT] = 50000,
+			[MODERATE] = 52000,
+			[SEVERE] = 55000,
+			[CRITICAL] = 60000,
+			[EMERGENCY] = 65000,
+			[SHUTDOWN] = 95000,
+			},
+			true,
+		},
+	};
+
+	std::vector<std::string> cpu_sensors_monaco = {
+		"cpuss-0",
+		"cpuss-1",
+		"cpuss-0",
+		"cpuss-1",
+		"cpuss-0",
+		"cpuss-1",
+		"cpuss-0",
+		"cpuss-1",
+	};
+
+	std::vector<struct target_therm_cfg> sensor_cfg_monaco = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_monaco,
+			"",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpu" },
+			"gpu",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::SKIN,
+			{ "pa-therm0" },
+			"skin",
+			{
+			[LIGHT] = 40000,
+			[MODERATE] = 42000,
+			[SEVERE] = 45000,
+			[CRITICAL] = 50000,
+			[EMERGENCY] = 55000,
+			[SHUTDOWN] = 95000,
+			},
+			true,
+		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm5100-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 1100,
+			[SHUTDOWN] = 1500,
 			},
 			true,
 		},
@@ -1804,6 +2056,16 @@ namespace thermal {
 		{577, pineapple_common}, //Pineapplep
 		{618, sun_specific}, //Sun
 		{639, sun_specific}, //Sunp
+		{537, parrot_common}, //Netrani mobile
+		{583, parrot_common}, //Netrani mobile without modem
+		{613, parrot_common}, //Netrani APQ
+		{631, parrot_common},
+		{633, parrot_common}, //Netrani Gaming SKU with modem
+		{634, parrot_common}, //Netrani Gaming SKU without modem
+		{638, parrot_common}, //SM7435P
+		{663, parrot_common}, //SM7435
+		{486, sensor_cfg_monaco}, // monaco
+		{517, sensor_cfg_monaco}, // monaco
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -1828,6 +2090,11 @@ namespace thermal {
 		{601, kalama_specific}, //Kalamap_sg
 		{557, pineapple_specific}, //Pineapple
 		{577, pineapple_specific}, //Pineapplep
+		{537, parrot_specific}, //Netrani mobile
+		{583, parrot_specific}, //Netrani mobile without modem
+		{613, parrot_specific}, //Netrani APQ
+		{631, parrot_specific},
+		{663, parrot_specific}, //Netrani pro
 	};
 
 	const std::unordered_multimap<int, std::pair<int, std::vector<struct target_therm_cfg>>>
@@ -1853,12 +2120,14 @@ namespace thermal {
 
 		auto range = msm_limit_profile_specific.equal_range(socID);
 		auto it = range.first;
-		for (; it != range.second; ++it) {
-			if (it->second.first != lp)
-				continue;
-			targetConf = it->second.second;
-			conf.insert(conf.end(), targetConf.begin(),targetConf.end());
-			break;
+		if (range.first != msm_limit_profile_specific.end()) {
+			for (; it != range.second; ++it) {
+				if (it->second.first != lp)
+					continue;
+				targetConf = it->second.second;
+				conf.insert(conf.end(), targetConf.begin(),targetConf.end());
+				break;
+			}
 		}
 
 		return conf;
@@ -1893,10 +2162,13 @@ namespace thermal {
 			return;
 		}
 
-		limitp = cmnInst.findLimitProfile();
-		if (limitp < 0) {
-			LOG(DEBUG) << "Invalid limit profile, defaulting to 0.";
-			limitp = 0;
+		auto range = msm_limit_profile_specific.equal_range(soc_id);
+		if (range.first != msm_limit_profile_specific.end()) {
+			limitp = cmnInst.findLimitProfile();
+			if (limitp < 0) {
+				LOG(DEBUG) << "Invalid limit profile, defaulting to 0.";
+				limitp = 0;
+			}
 		}
 
 		it = msm_soc_map.find(soc_id);
