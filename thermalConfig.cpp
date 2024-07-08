@@ -48,7 +48,7 @@ namespace aidl {
 namespace android {
 namespace hardware {
 namespace thermal {
-
+	constexpr std::string_view hwPlatformPath("/sys/devices/soc0/hw_platform");
 	constexpr std::string_view socIDPath("/sys/devices/soc0/soc_id");
 
 	std::vector<std::string> cpu_sensors_bengal =
@@ -2088,6 +2088,81 @@ namespace thermal {
 		},
 	};
 
+	std::vector<std::string> cpu_sensors_ravelin =
+	{
+		"cpu-0-0",
+		"cpu-0-1",
+		"cpu-0-2",
+		"cpu-0-3",
+		"cpu-0-4",
+		"cpu-0-5",
+		"cpu-1-0",
+		"cpu-1-2",
+	};
+
+	std::vector<struct target_therm_cfg>  ravelin_common = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_ravelin,
+			"",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss" },
+			"GPU",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 115000,
+			},
+			true,
+		},
+		{
+			TemperatureType::SKIN,
+			{ "sys-therm-1" },
+			"skin",
+			{
+			[LIGHT] = 50000,
+			[MODERATE] = 52000,
+			[SEVERE] = 55000,
+			[CRITICAL] = 60000,
+			[EMERGENCY] = 65000,
+			[SHUTDOWN] = 95000,
+			},
+			true,
+		},
+	};
+
+	std::vector<struct target_therm_cfg>  ravelin_specific_qrd = {
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pmi632-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 6000,
+			[SHUTDOWN] = 7500,
+			},
+			true,
+		},
+	};
+
+	std::vector<struct target_therm_cfg>  ravelin_specific_idp = {
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm7250b-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 6000,
+			[SHUTDOWN] = 7500,
+			},
+			true,
+		},
+	};
+
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
 		msm_soc_map = {
 		{417, sensor_cfg_bengal}, // bengal
@@ -2153,6 +2228,11 @@ namespace thermal {
 		{380, sensor_cfg_talos_common},
 		{384, sensor_cfg_talos_common},
 		{405, sensor_cfg_sa8195_common},
+		{568, ravelin_common}, //Clarence Mobile
+		{581, ravelin_common}, //Clarence IOT
+		{582, ravelin_common}, //Clarence IOT without modem
+		{653, ravelin_common}, //Clarence Gaming
+		{654, ravelin_common}, //Clarence Gaming
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -2203,8 +2283,15 @@ namespace thermal {
 		{380, "talosAU"},
 	};
 
+	const std::unordered_multimap<int, std::pair<std::string,
+				std::vector<struct target_therm_cfg>>>
+		msm_platform_specific = {
+		{568, std::make_pair("QRD", ravelin_specific_qrd)},
+		{568, std::make_pair("IDP", ravelin_specific_idp)},
+	};
+
 	std::vector<struct target_therm_cfg> add_target_config(
-			int socID, int lp,
+			int socID, std::string hwPlatform, int lp,
 			std::vector<struct target_therm_cfg> conf)
 	{
 		std::vector<struct target_therm_cfg> targetConf;
@@ -2216,14 +2303,26 @@ namespace thermal {
 						targetConf.end());
 		}
 
-		auto range = msm_limit_profile_specific.equal_range(socID);
-		auto it = range.first;
-		if (range.first != msm_limit_profile_specific.end()) {
-			for (; it != range.second; ++it) {
-				if (it->second.first != lp)
+		auto range1 = msm_limit_profile_specific.equal_range(socID);
+		auto it1 = range1.first;
+		if (range1.first != msm_limit_profile_specific.end()) {
+			for (; it1 != range1.second; ++it1) {
+				if (it1->second.first != lp)
 					continue;
-				targetConf = it->second.second;
+				targetConf = it1->second.second;
 				conf.insert(conf.end(), targetConf.begin(),targetConf.end());
+				break;
+			}
+		}
+
+		auto range2 = msm_platform_specific.equal_range(socID);
+		auto it2 = range2.first;
+		if (range2.first != msm_platform_specific.end()) {
+			for (; it2 != range2.second; ++it2) {
+				if (it2->second.first != hwPlatform)
+					continue;
+				targetConf = it2->second.second;
+				conf.insert(conf.end(), targetConf.begin(), targetConf.end());
 				break;
 			}
 		}
@@ -2246,6 +2345,12 @@ namespace thermal {
 				LOG(ERROR) <<"soc ID fetch error";
 				return;
 			}
+
+			if (cmnInst.readFromFile(hwPlatformPath, hw_platform) <= 0) {
+				LOG(ERROR) <<"hw Platform fetch error";
+				continue;
+			}
+
 			try {
 				soc_id = std::stoi(soc_val, nullptr, 0);
 				read_ok = true;
@@ -2275,7 +2380,8 @@ namespace thermal {
 			LOG(ERROR) << "No config for soc ID: " << soc_id;
 			return;
 		}
-		thermalConfig = add_target_config(soc_id, limitp, it->second);
+		thermalConfig = add_target_config(soc_id, hw_platform, limitp, it->second);
+
 		for (it_vec = thermalConfig.begin();
 				it_vec != thermalConfig.end(); it_vec++) {
 			if (it_vec->type == TemperatureType::BCL_PERCENTAGE)
