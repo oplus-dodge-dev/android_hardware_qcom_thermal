@@ -66,7 +66,7 @@ static const Temperature dummy_temp_1_0 = {
 	.type = TemperatureType::SKIN,
 	.name = "test sensor",
 	.value = 30,
-	.throttlingStatus = ThrottlingSeverity::SEVERE,
+	.throttlingStatus = ThrottlingSeverity::NONE,
 };
 
 Thermal::Thermal():
