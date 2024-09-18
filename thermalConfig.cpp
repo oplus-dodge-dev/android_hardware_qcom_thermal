@@ -118,6 +118,7 @@ namespace thermal {
 			[SHUTDOWN] = 4200,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -196,6 +197,7 @@ namespace thermal {
 			[SEVERE] = 5500,
 			[SHUTDOWN] = 6000,
 			},
+			true,
 			true,
 		},
 		{
@@ -277,6 +279,7 @@ namespace thermal {
 			[SHUTDOWN] = 4200,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -346,6 +349,7 @@ namespace thermal {
 			[SEVERE] = 4500,
 			[SHUTDOWN] = 5000,
 			},
+			true,
 			true,
 		},
 		{
@@ -425,6 +429,7 @@ namespace thermal {
 			[SHUTDOWN] = 6000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -492,6 +497,7 @@ namespace thermal {
 			[SEVERE] = 5500,
 			[SHUTDOWN] = 6000,
 			},
+			true,
 			true,
 		},
 	};
@@ -561,6 +567,7 @@ namespace thermal {
 			[SEVERE] = 4500,
 			[SHUTDOWN] = 5000,
 			},
+			true,
 			true,
 		},
 		{
@@ -641,6 +648,7 @@ namespace thermal {
 			[SEVERE] = 4500,
 			[SHUTDOWN] = 5000,
 			},
+			true,
 			true,
 		},
 		{
@@ -726,6 +734,7 @@ namespace thermal {
 			[SEVERE] = 6000,
 			[SHUTDOWN] = 7500,
 			},
+			true,
 			true,
 		},
 		{
@@ -946,6 +955,7 @@ namespace thermal {
 			[SHUTDOWN] = 7500,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::SKIN,
@@ -1118,6 +1128,7 @@ namespace thermal {
 			[SHUTDOWN] = 10000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::SKIN,
@@ -1144,6 +1155,7 @@ namespace thermal {
 			[SEVERE] = 6000,
 			[SHUTDOWN] = 7500,
 			},
+			true,
 			true,
 		},
 		{
@@ -1371,6 +1383,7 @@ namespace thermal {
 			[SEVERE] = 9000,
 			[SHUTDOWN] = 10000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1861,6 +1874,7 @@ namespace thermal {
 			[SHUTDOWN] = 7500,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::SKIN,
@@ -1932,6 +1946,7 @@ namespace thermal {
 			[SEVERE] = 1100,
 			[SHUTDOWN] = 1500,
 			},
+			true,
 			true,
 		},
 	};
@@ -2147,6 +2162,7 @@ namespace thermal {
 			[SHUTDOWN] = 7500,
 			},
 			true,
+			true,
 		},
 	};
 
@@ -2159,6 +2175,7 @@ namespace thermal {
 			[SEVERE] = 6000,
 			[SHUTDOWN] = 7500,
 			},
+			true,
 			true,
 		},
 	};
