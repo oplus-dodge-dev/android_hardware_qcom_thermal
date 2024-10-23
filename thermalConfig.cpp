@@ -2336,6 +2336,7 @@ namespace thermal {
 		std::vector<struct target_therm_cfg>::iterator it_vec;
 		bool bcl_defined = false;
 		std::string soc_val;
+		std::string hwPlatform;
 		int ct = 0;
 		bool read_ok = false;
 		limitp = 0;
@@ -2346,11 +2347,6 @@ namespace thermal {
 				return;
 			}
 
-			if (cmnInst.readFromFile(hwPlatformPath, hw_platform) <= 0) {
-				LOG(ERROR) <<"hw Platform fetch error";
-				continue;
-			}
-
 			try {
 				soc_id = std::stoi(soc_val, nullptr, 0);
 				read_ok = true;
@@ -2358,6 +2354,19 @@ namespace thermal {
 			catch (std::exception &err) {
 				LOG(ERROR) <<"soc id stoi err:" << err.what()
 					<< " buf:" << soc_val;
+			}
+
+			if (cmnInst.readFromFile(hwPlatformPath, hwPlatform) <= 0) {
+				LOG(ERROR) <<"hw Platform fetch error";
+				continue;
+			}
+
+			try {
+				if (!hwPlatform.empty())
+					LOG(INFO) <<"HW Platform is found";
+			}
+			catch (std::exception &err) {
+				LOG(ERROR) <<"hw Platform is not found:" << err.what();
 			}
 			ct++;
 		} while (!read_ok && ct < RETRY_CT);
@@ -2380,7 +2389,7 @@ namespace thermal {
 			LOG(ERROR) << "No config for soc ID: " << soc_id;
 			return;
 		}
-		thermalConfig = add_target_config(soc_id, hw_platform, limitp, it->second);
+		thermalConfig = add_target_config(soc_id, hwPlatform, limitp, it->second);
 
 		for (it_vec = thermalConfig.begin();
 				it_vec != thermalConfig.end(); it_vec++) {
