@@ -2380,6 +2380,7 @@ namespace thermal {
 		{601, kalama_common}, //Kalamap_sg
 		{557, pineapple_common}, //Pineapple
 		{577, pineapple_common}, //Pineapplep
+		{696, pineapple_common}, //Pineapple compute
 		{618, sun_specific}, //Sun
 		{639, sun_specific}, //Sunp
 		{537, parrot_common}, //Netrani mobile
@@ -2428,6 +2429,7 @@ namespace thermal {
 		{601, kalama_specific}, //Kalamap_sg
 		{557, pineapple_specific}, //Pineapple
 		{577, pineapple_specific}, //Pineapplep
+		{696, pineapple_specific}, //Pineapple compute
 		{537, parrot_specific}, //Netrani mobile
 		{583, parrot_specific}, //Netrani mobile without modem
 		{613, parrot_specific}, //Netrani APQ
