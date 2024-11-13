@@ -2352,6 +2352,17 @@ namespace thermal {
 			true,
 			true,
 		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pmiv010x-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 7000,
+			[SHUTDOWN] = 9000,
+			},
+			true,
+			true,
+		},
 	};
 
 	std::vector<std::string> cpu_sensors_kera = {
@@ -2462,7 +2473,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::BCL_CURRENT,
-			{ "pmiv0102-ibat-lvl0" },
+			{ "pmiv010x-ibat-lvl0" },
 			"ibat",
 			{
 			[SEVERE] = 7000,
