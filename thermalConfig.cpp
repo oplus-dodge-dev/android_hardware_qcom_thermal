@@ -118,6 +118,7 @@ namespace thermal {
 			[SHUTDOWN] = 4200,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -196,6 +197,7 @@ namespace thermal {
 			[SEVERE] = 5500,
 			[SHUTDOWN] = 6000,
 			},
+			true,
 			true,
 		},
 		{
@@ -277,6 +279,7 @@ namespace thermal {
 			[SHUTDOWN] = 4200,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -346,6 +349,7 @@ namespace thermal {
 			[SEVERE] = 4500,
 			[SHUTDOWN] = 5000,
 			},
+			true,
 			true,
 		},
 		{
@@ -425,6 +429,7 @@ namespace thermal {
 			[SHUTDOWN] = 6000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::BCL_PERCENTAGE,
@@ -492,6 +497,7 @@ namespace thermal {
 			[SEVERE] = 5500,
 			[SHUTDOWN] = 6000,
 			},
+			true,
 			true,
 		},
 	};
@@ -561,6 +567,7 @@ namespace thermal {
 			[SEVERE] = 4500,
 			[SHUTDOWN] = 5000,
 			},
+			true,
 			true,
 		},
 		{
@@ -641,6 +648,7 @@ namespace thermal {
 			[SEVERE] = 4500,
 			[SHUTDOWN] = 5000,
 			},
+			true,
 			true,
 		},
 		{
@@ -726,6 +734,7 @@ namespace thermal {
 			[SEVERE] = 6000,
 			[SHUTDOWN] = 7500,
 			},
+			true,
 			true,
 		},
 		{
@@ -946,6 +955,7 @@ namespace thermal {
 			[SHUTDOWN] = 7500,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::SKIN,
@@ -1118,6 +1128,7 @@ namespace thermal {
 			[SHUTDOWN] = 10000,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::SKIN,
@@ -1144,6 +1155,7 @@ namespace thermal {
 			[SEVERE] = 6000,
 			[SHUTDOWN] = 7500,
 			},
+			true,
 			true,
 		},
 		{
@@ -1371,6 +1383,7 @@ namespace thermal {
 			[SEVERE] = 9000,
 			[SHUTDOWN] = 10000,
 			},
+			true,
 			true,
 		},
 		{
@@ -1861,6 +1874,7 @@ namespace thermal {
 			[SHUTDOWN] = 7500,
 			},
 			true,
+			true,
 		},
 		{
 			TemperatureType::SKIN,
@@ -1932,6 +1946,7 @@ namespace thermal {
 			[SEVERE] = 1100,
 			[SHUTDOWN] = 1500,
 			},
+			true,
 			true,
 		},
 	};
@@ -2147,6 +2162,7 @@ namespace thermal {
 			[SHUTDOWN] = 7500,
 			},
 			true,
+			true,
 		},
 	};
 
@@ -2158,6 +2174,159 @@ namespace thermal {
 			{
 			[SEVERE] = 6000,
 			[SHUTDOWN] = 7500,
+			},
+			true,
+			true,
+		},
+	};
+
+	std::vector<std::string> cpu_sensors_tuna = {
+		"cpu-0-0-0",
+		"cpu-0-1-0",
+		"cpu-1-0-0",
+		"cpu-1-1-0",
+		"cpu-1-2-0",
+		"cpu-1-3-0",
+		"cpu-1-4-0",
+		"cpu-2-0-0",
+	};
+
+	std::vector<struct target_therm_cfg> tuna_common = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_tuna,
+			"",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-0" },
+			"GPU0",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-1" },
+			"GPU1",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-2" },
+			"GPU2",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-3" },
+			"GPU3",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-4" },
+			"GPU4",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-5" },
+			"GPU5",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphvx-0" },
+			"nsp0",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphvx-1" },
+			"nsp1",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphmx-0" },
+			"nsp3",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphmx-1" },
+			"nsp4",
+			{
+			[SEVERE] = 105000,
+			[SHUTDOWN] = 125000,
+			},
+			true,
+			true,
+		},
+	};
+
+	std::vector<struct target_therm_cfg> tuna_specific = {
+		{
+			TemperatureType::SKIN,
+			{ "sys-therm-3" },
+			"skin",
+			{
+			[LIGHT] = 48000,
+			[MODERATE] = 49000,
+			[SEVERE] = 50000,
+			[CRITICAL] = 60000,
+			[EMERGENCY] = 61000,
+			[SHUTDOWN] = 90000,
 			},
 			true,
 		},
@@ -2233,6 +2402,8 @@ namespace thermal {
 		{582, ravelin_common}, //Clarence IOT without modem
 		{653, ravelin_common}, //Clarence Gaming
 		{654, ravelin_common}, //Clarence Gaming
+		{681, tuna_common}, //Bonito
+		{655, tuna_common}, //Bonito
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -2263,6 +2434,8 @@ namespace thermal {
 		{631, parrot_specific},
 		{663, parrot_specific}, //Netrani pro
 		{355, sensor_cfg_talos_specific},
+		{681, tuna_specific}, //Bonito
+		{655, tuna_specific}, //Bonito
 	};
 
 	const std::unordered_multimap<int, std::pair<int, std::vector<struct target_therm_cfg>>>
