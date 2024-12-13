@@ -2205,7 +2205,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::GPU,
-			{ "gpuss-0" },
+			{ "gpu-0" },
 			"GPU0",
 			{
 			[SEVERE] = 105000,
@@ -2216,7 +2216,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::GPU,
-			{ "gpuss-1" },
+			{ "gpu-1" },
 			"GPU1",
 			{
 			[SEVERE] = 105000,
@@ -2227,7 +2227,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::GPU,
-			{ "gpuss-2" },
+			{ "gpu-2" },
 			"GPU2",
 			{
 			[SEVERE] = 105000,
@@ -2238,7 +2238,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::GPU,
-			{ "gpuss-3" },
+			{ "gpu-3" },
 			"GPU3",
 			{
 			[SEVERE] = 105000,
@@ -2249,7 +2249,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::GPU,
-			{ "gpuss-4" },
+			{ "gpu-4" },
 			"GPU4",
 			{
 			[SEVERE] = 105000,
@@ -2260,7 +2260,7 @@ namespace thermal {
 		},
 		{
 			TemperatureType::GPU,
-			{ "gpuss-5" },
+			{ "gpu-5" },
 			"GPU5",
 			{
 			[SEVERE] = 105000,
@@ -2330,6 +2330,169 @@ namespace thermal {
 			},
 			true,
 		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pmih010x-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 7000,
+			[SHUTDOWN] = 9000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm7550ba-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 7000,
+			[SHUTDOWN] = 9000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pmiv010x-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 7000,
+			[SHUTDOWN] = 9000,
+			},
+			true,
+			true,
+		},
+	};
+
+	std::vector<std::string> cpu_sensors_kera = {
+		"cpu-0-0-0",
+		"cpu-0-1-0",
+		"cpu-0-2-0",
+		"cpu-1-0-0",
+		"cpu-1-1-0",
+		"cpu-1-2-0",
+		"cpu-1-3-0",
+		"cpu-2-0-0",
+	};
+
+	std::vector<struct target_therm_cfg> kera_common = {
+		{
+			TemperatureType::CPU,
+			cpu_sensors_kera,
+			"",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-0" },
+			"GPU0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpuss-1" },
+			"GPU1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphvx-0" },
+			"nsp0",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphvx-1" },
+			"nsp1",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphmx-0" },
+			"nsp3",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::NPU,
+			{ "nsphmx-1" },
+			"nsp4",
+			{
+			[SEVERE] = 95000,
+			[SHUTDOWN] = 105000,
+			},
+			true,
+			true,
+		},
+	};
+
+	std::vector<struct target_therm_cfg> kera_specific = {
+		{
+			TemperatureType::SKIN,
+			{ "sys-therm-3" },
+			"skin",
+			{
+			[LIGHT] = 40000,
+			[MODERATE] = 42000,
+			[SEVERE] = 45000,
+			[CRITICAL] = 50000,
+			[EMERGENCY] = 55000,
+			[SHUTDOWN] = 90000,
+			},
+			true,
+		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pmiv010x-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 7000,
+			[SHUTDOWN] = 9000,
+			},
+			true,
+			true,
+		},
+		{
+			TemperatureType::BCL_CURRENT,
+			{ "pm7550ba-ibat-lvl0" },
+			"ibat",
+			{
+			[SEVERE] = 7000,
+			[SHUTDOWN] = 9000,
+			},
+			true,
+			true,
+		},
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -2380,6 +2543,7 @@ namespace thermal {
 		{601, kalama_common}, //Kalamap_sg
 		{557, pineapple_common}, //Pineapple
 		{577, pineapple_common}, //Pineapplep
+		{696, pineapple_common}, //Pineapple compute
 		{618, sun_specific}, //Sun
 		{639, sun_specific}, //Sunp
 		{537, parrot_common}, //Netrani mobile
@@ -2404,6 +2568,9 @@ namespace thermal {
 		{654, ravelin_common}, //Clarence Gaming
 		{681, tuna_common}, //Bonito
 		{655, tuna_common}, //Bonito
+		{694, tuna_common}, //Bonito
+		{659, kera_common}, //Eliza
+		{686, kera_common}, //Eliza
 	};
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
@@ -2428,6 +2595,7 @@ namespace thermal {
 		{601, kalama_specific}, //Kalamap_sg
 		{557, pineapple_specific}, //Pineapple
 		{577, pineapple_specific}, //Pineapplep
+		{696, pineapple_specific}, //Pineapple compute
 		{537, parrot_specific}, //Netrani mobile
 		{583, parrot_specific}, //Netrani mobile without modem
 		{613, parrot_specific}, //Netrani APQ
@@ -2436,6 +2604,9 @@ namespace thermal {
 		{355, sensor_cfg_talos_specific},
 		{681, tuna_specific}, //Bonito
 		{655, tuna_specific}, //Bonito
+		{694, tuna_specific}, //Bonito
+		{659, kera_specific}, //Eliza
+		{686, kera_specific}, //Eliza
 	};
 
 	const std::unordered_multimap<int, std::pair<int, std::vector<struct target_therm_cfg>>>
