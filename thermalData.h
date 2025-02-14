@@ -89,7 +89,6 @@ using ::aidl::android::hardware::thermal::ThrottlingSeverity;
 		int thresh[SHUTDOWN + 1];
 		bool positive_thresh_ramp;
 		bool no_trip_set = false;
-		struct therm_sensor *sens = NULL;
 	};
 
 	struct therm_cdev {
