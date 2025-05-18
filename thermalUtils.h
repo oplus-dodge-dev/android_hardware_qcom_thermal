@@ -51,10 +51,11 @@ namespace hardware {
 namespace thermal {
 
 using ueventCB = std::function<void(Temperature &t)>;
+using notifyCB = std::function<void(CoolingDevice &c)>;
 
 class ThermalUtils {
 	public:
-		ThermalUtils(const ueventCB &inp_cb);
+		ThermalUtils(const ueventCB &inp_cb, const notifyCB &inp_cdev_cb);
 		~ThermalUtils() = default;
 		bool isCdevInitialized();
 		bool isCdevInitialized(CoolingType type);
@@ -75,6 +76,8 @@ class ThermalUtils {
 		ThermalMonitor monitor;
 		std::unordered_map<std::string, struct therm_sensor>
 			thermalConfig;
+		std::unordered_map<int, struct therm_cdev>
+			cdev;
 		std::vector<struct therm_cdev> cdevList;
 		std::mutex sens_cb_mutex;
 		ueventCB cb;

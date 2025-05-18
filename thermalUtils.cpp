@@ -47,7 +47,7 @@ namespace android {
 namespace hardware {
 namespace thermal {
 
-ThermalUtils::ThermalUtils(const ueventCB &inp_cb):
+ThermalUtils::ThermalUtils(const ueventCB &inp_cb, const notifyCB &inp_cdev_cb):
 	cfg(),
 	cmnInst(),
 	monitor(std::bind(&ThermalUtils::ueventParse, this,
@@ -72,8 +72,13 @@ ThermalUtils::ThermalUtils(const ueventCB &inp_cb):
 		monitor.start();
 	}
 	ret = cmnInst.initCdev();
-	if (ret > 0)
+	if (ret > 0) {
 		cdevList = cmnInst.fetch_cdev_list();
+		for (struct therm_cdev cdevs: cdevList) {
+			cmnInst.read_cdev_state(cdevs);
+			cdev[cdevs.cdevn] = cdevs;
+		}
+	}
 }
 
 bool ThermalUtils::isSensorInitialized()
